@@ -27,4 +27,7 @@ jobs:
           sudo apt install docker-ce
           sudo apt install maven
           mvn clean package spring-boot:repackage
+          docker tag cartservice:0.0.1-SNAPSHOT sponmuth/cartservice
+          docker images
+          docker push sponmuth/cartservice
           

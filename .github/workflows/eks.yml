@@ -1,0 +1,29 @@
+name: 'eks'
+
+on:
+  pull_request:
+   branches:
+    - main
+  workflow_dispatch:    
+
+jobs:
+  packer_validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: 
+        # env:
+        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        #   ssh_private_key_file: ${{ secrets.ssh_private_key_file_hk }}
+        #   PASSWORD_CUDEPAPI: ${{ secrets.PASSWORD_CUDEPAPI }}
+        #   key_pair_name: ${{ secrets.key_pair_name_hk }}
+        run: |
+          sudo apt update
+          sudo apt install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+          apt-cache policy docker-ce
+          sudo apt install docker-ce
+          docker version
+          

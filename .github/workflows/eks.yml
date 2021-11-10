@@ -17,13 +17,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - uses: actions/checkout@v1
-      - name: 
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Maven build
         run: |
           sudo apt update
           mvn clean package spring-boot:repackage
+      - name: Docker push
+        run: |
           docker tag cartservice:0.0.1-SNAPSHOT sponmuth/cartservice
           docker push sponmuth/cartservice
+      - name: EKS deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+           aws eks --region us-east-1 update-kubeconfig --name OpenSourceObservabilityStack
+           kubectl apply -f deployment.yml
+           kubectl apply -f service.yml             

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:    
 
 jobs:
-  packer_validate:
+  eks_deployment:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -25,5 +25,6 @@ jobs:
           sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
           apt-cache policy docker-ce
           sudo apt install docker-ce
-          docker version
+          sudo apt install maven
+          mvn clean package spring-boot:repackage
           
